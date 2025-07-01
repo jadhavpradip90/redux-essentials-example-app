@@ -9,6 +9,7 @@ import { useAppSelector } from './app/hooks';
 import { selectCurrentUsername } from './feature/auth/authSlice';
 import { UsersList } from './feature/users/UsersList';
 import { UserPage } from './feature/users/UserPage';
+import { NotificationsList } from './feature/notifications/NotificationsList';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const username = useAppSelector(selectCurrentUsername)
@@ -35,6 +36,7 @@ function App() {
                   <Route path="/editPost/:postId" element={<EditPostForm />} />
                   <Route path="/users" element={<UsersList />} />
                   <Route path="/users/:userId" element={<UserPage />} />
+                  <Route path="/notifications" element={<NotificationsList />} />
                 </Routes>
               </ProtectedRoute>
             }

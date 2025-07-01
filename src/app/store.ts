@@ -2,12 +2,14 @@ import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import postsReducer from "../feature/posts/postsSlice"
 import userReducer from "../feature/users/usersSlice";
 import authReducer from "../feature/auth/authSlice";
+import notificationReducer from "../feature/notifications/notificationsSlice";
 
 export const store = configureStore({
     reducer: {
         posts: postsReducer,
         users: userReducer,
-        auth: authReducer
+        auth: authReducer,
+        notifications: notificationReducer
     }
 })
 
