@@ -1,8 +1,8 @@
+import { client } from '@/api/client';
 import { RootState } from "@/app/store";
-import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { logout } from "../auth/authSlice";
 import { createAppAsyncThunk } from "@/app/withTypes";
-import { client } from '@/api/client'
+import { createSlice, PayloadAction, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import { logout } from "../auth/authSlice";
 
 export interface Reactions {
   thumbsUp: number
@@ -137,11 +137,20 @@ export const selectAllPosts = (state: RootState) => state.posts.posts
 
 export const selectPostById = (state: RootState, postId: string) => state.posts.posts.find(post => post.id === postId)
 
-export const selectPostsByUser = (state: RootState, userId: string) => {
-  const allPosts = selectAllPosts(state)
-  // ❌ This seems suspicious! See more details below
-  return allPosts.filter(post => post.user === userId)
-}
+export const selectPostsByUser = createSelector(
+  // Pass in one or more "input selectors"
+  [
+    // we can pass in an existing selector function that
+    // reads something from the root `state` and returns it
+    selectAllPosts,
+    // and another function that extracts one of the arguments
+    // and passes that onward
+    (state: RootState, userId: string) => userId
+  ],
+  // the output function gets those values as its arguments,
+  // and will run when either input value changes
+  (posts, userId) => posts.filter(post => post.user === userId)
+)
 
 export const selectPostsStatus = (state: RootState) => state.posts.status;
 
