@@ -1,13 +1,22 @@
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useAppSelector } from '@/app/hooks'
-import { selectAllPosts } from './postsSlice'
+import { useAppSelector, useAppDispatch } from '@/app/hooks'
 import { PostAuthor } from './PostAuthor'
 import { TimeAgo } from '@/components/TimeAgo'
 import { ReactionButtons } from './ReactionButtons'
+import { fetchPosts, selectAllPosts, selectPostsStatus } from './postsSlice'
 
 export const PostsList = () => {
   // Select the `state.posts` value from the store into the component
+  const dispatch = useAppDispatch()
   const posts = useAppSelector(selectAllPosts)
+  const postStatus = useAppSelector(selectPostsStatus)
+
+  useEffect(() => {
+    if (postStatus === 'idle') {
+      dispatch(fetchPosts())
+    }
+  }, [postStatus, dispatch])
 
   // Sort posts in reverse chronological order by datetime string
   const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
